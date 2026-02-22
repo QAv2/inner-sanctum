@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+*.pyo
+simulator/data/
+*.egg-info/
+.venv/
