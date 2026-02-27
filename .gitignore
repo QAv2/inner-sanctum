@@ -4,3 +4,4 @@ __pycache__/
 simulator/data/
 *.egg-info/
 .venv/
+.env
