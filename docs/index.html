@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sealed Capsule — Reference Frame Engine</title>
+  <meta name="description" content="Interactive 3D viewer and documentation for the bench-scale reference frame engine prototype.">
+
+  <link rel="stylesheet" href="css/style.css">
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+    }
+  }
+  </script>
+</head>
+<body>
+
+  <!-- Intro Overlay -->
+  <div id="intro-overlay">
+    <div id="intro-text"></div>
+  </div>
+
+  <!-- Main Layout -->
+  <div id="app">
+    <!-- 3D Viewport -->
+    <div id="viewport-container">
+      <canvas id="viewer-canvas"></canvas>
+
+      <!-- Layer Controls (floating, top-left of viewport) -->
+      <div id="layer-panel"></div>
+
+      <!-- Component Info (floating, bottom of viewport) -->
+      <div id="component-info"></div>
+    </div>
+
+    <!-- Documentation Sidebar -->
+    <div id="docs-sidebar">
+      <div id="docs-content"></div>
+    </div>
+  </div>
+
+  <!-- Entry Point -->
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

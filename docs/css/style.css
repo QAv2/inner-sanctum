@@ -1,0 +1,437 @@
+/* ===========================================================
+   Sealed Capsule — Device Viewer Styles
+   Dark lab palette, 60/40 split desktop, stacked mobile
+   =========================================================== */
+
+/* --- Reset & Base --- */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg:        #06060c;
+  --bg-panel:  #0c0c18;
+  --bg-glass:  rgba(12, 12, 24, 0.75);
+  --border:    rgba(51, 136, 255, 0.15);
+  --accent:    #3388ff;
+  --accent-dim:#1a4488;
+  --amber:     #ffa040;
+  --text:      #c8ccd4;
+  --text-dim:  #6a7080;
+  --text-bright:#e8ecf4;
+  --verified:  #40c060;
+  --hypothesis:#ffa040;
+  --circular:  #ff4040;
+  --model:     #60a0ff;
+  --untested:  #888;
+  --copper:    #d4884a;
+  --mercury:   #c0c8d0;
+  --lead:      #4a4a50;
+  --energy:    #3388ff;
+  --shell:     rgba(200, 210, 230, 0.6);
+  --coil-x:    #dd3b3b;
+  --coil-y:    #3bdd3b;
+  --coil-z:    #3b64dd;
+  --axis-x:    #ff5555;
+  --axis-y:    #55ff55;
+  --axis-z:    #5588ff;
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'SF Mono', 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* --- Intro Overlay --- */
+#intro-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 1.5s ease;
+}
+#intro-overlay.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+#intro-overlay.hidden { display: none; }
+
+#intro-text {
+  font-family: 'SF Mono', 'Cascadia Code', 'Fira Code', monospace;
+  font-size: 15px;
+  color: var(--accent);
+  text-align: left;
+  max-width: 520px;
+  padding: 2rem;
+  white-space: pre-wrap;
+  line-height: 1.8;
+}
+#intro-text .amber { color: var(--amber); }
+#intro-text .dim   { color: var(--text-dim); }
+
+/* --- App Layout --- */
+#app {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+#app.visible { opacity: 1; }
+
+/* --- Viewport --- */
+#viewport-container {
+  position: relative;
+  flex: 0 0 60%;
+  height: 100%;
+  background: var(--bg);
+  overflow: hidden;
+}
+
+#viewer-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+}
+#viewer-canvas:active { cursor: grabbing; }
+
+/* --- Layer Panel (glassmorphic, top-left of viewport) --- */
+#layer-panel {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  background: var(--bg-glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 14px;
+  z-index: 10;
+  min-width: 160px;
+  user-select: none;
+}
+
+#layer-panel h3 {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-dim);
+  margin-bottom: 8px;
+}
+
+.layer-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 3px 0;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.layer-row:hover { opacity: 0.8; }
+.layer-row.off { opacity: 0.35; }
+.layer-row.off .layer-dot { opacity: 0.3; }
+
+.layer-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.layer-check {
+  width: 14px;
+  height: 14px;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+.layer-label {
+  font-size: 12px;
+  color: var(--text);
+}
+
+/* --- Component Info Panel (bottom of viewport) --- */
+#component-info {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  right: 16px;
+  background: var(--bg-glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px 18px;
+  z-index: 10;
+  display: none;
+  max-height: 200px;
+  overflow-y: auto;
+}
+#component-info.visible { display: block; }
+
+#component-info .info-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-bright);
+  margin-bottom: 4px;
+}
+#component-info .info-role {
+  font-size: 12px;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+#component-info .info-params {
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-bottom: 6px;
+}
+#component-info .info-params span {
+  display: inline-block;
+  background: rgba(51, 136, 255, 0.1);
+  border: 1px solid rgba(51, 136, 255, 0.15);
+  border-radius: 3px;
+  padding: 1px 6px;
+  margin: 2px 4px 2px 0;
+  font-family: inherit;
+}
+
+/* --- Rigor Tags --- */
+.rigor-tag {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 2px 8px;
+  border-radius: 3px;
+  margin-top: 2px;
+}
+.rigor-verified    { background: rgba(64, 192, 96, 0.15); color: var(--verified); border: 1px solid rgba(64, 192, 96, 0.3); }
+.rigor-hypothesis  { background: rgba(255, 160, 64, 0.15); color: var(--hypothesis); border: 1px solid rgba(255, 160, 64, 0.3); }
+.rigor-circular    { background: rgba(255, 64, 64, 0.15); color: var(--circular); border: 1px solid rgba(255, 64, 64, 0.3); }
+.rigor-model       { background: rgba(96, 160, 255, 0.15); color: var(--model); border: 1px solid rgba(96, 160, 255, 0.3); }
+.rigor-untested    { background: rgba(136, 136, 136, 0.15); color: var(--untested); border: 1px solid rgba(136, 136, 136, 0.3); }
+
+/* --- Docs Sidebar --- */
+#docs-sidebar {
+  flex: 0 0 40%;
+  height: 100%;
+  overflow-y: auto;
+  background: var(--bg-panel);
+  border-left: 1px solid var(--border);
+  padding: 24px 28px 60px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent-dim) transparent;
+}
+#docs-sidebar::-webkit-scrollbar { width: 6px; }
+#docs-sidebar::-webkit-scrollbar-track { background: transparent; }
+#docs-sidebar::-webkit-scrollbar-thumb { background: var(--accent-dim); border-radius: 3px; }
+
+/* --- Documentation Content --- */
+#docs-content h1 {
+  font-family: 'SF Mono', 'Cascadia Code', 'Fira Code', monospace;
+  font-size: 20px;
+  color: var(--text-bright);
+  margin-bottom: 4px;
+}
+
+#docs-content .subtitle {
+  font-size: 12px;
+  color: var(--text-dim);
+  margin-bottom: 24px;
+}
+
+details {
+  margin-bottom: 2px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+details + details { margin-top: 4px; }
+
+summary {
+  font-family: 'SF Mono', 'Cascadia Code', 'Fira Code', monospace;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-bright);
+  padding: 10px 14px;
+  cursor: pointer;
+  background: rgba(51, 136, 255, 0.04);
+  border-bottom: 1px solid transparent;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  user-select: none;
+  transition: background 0.15s;
+}
+summary:hover { background: rgba(51, 136, 255, 0.08); }
+summary::before {
+  content: '\25B6';
+  font-size: 9px;
+  color: var(--accent);
+  transition: transform 0.2s;
+}
+details[open] > summary::before { transform: rotate(90deg); }
+details[open] > summary { border-bottom-color: var(--border); }
+
+.section-body {
+  padding: 14px 18px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--text);
+}
+
+.section-body p { margin-bottom: 12px; }
+.section-body p:last-child { margin-bottom: 0; }
+
+.section-body strong { color: var(--text-bright); }
+.section-body em { color: var(--amber); font-style: normal; }
+
+.section-body code {
+  font-family: 'SF Mono', 'Cascadia Code', monospace;
+  font-size: 12px;
+  background: rgba(51, 136, 255, 0.08);
+  border: 1px solid rgba(51, 136, 255, 0.12);
+  border-radius: 3px;
+  padding: 1px 5px;
+}
+
+.section-body blockquote {
+  border-left: 3px solid var(--amber);
+  padding: 8px 14px;
+  margin: 12px 0;
+  background: rgba(255, 160, 64, 0.05);
+  color: var(--text);
+  font-style: italic;
+}
+
+/* Tables in docs */
+.section-body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 12px 0;
+  font-size: 12px;
+}
+.section-body th {
+  text-align: left;
+  padding: 6px 10px;
+  background: rgba(51, 136, 255, 0.06);
+  border-bottom: 1px solid var(--border);
+  color: var(--text-bright);
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.section-body td {
+  padding: 5px 10px;
+  border-bottom: 1px solid rgba(51, 136, 255, 0.06);
+  vertical-align: top;
+}
+.section-body tr:last-child td { border-bottom: none; }
+
+/* Lists in docs */
+.section-body ul, .section-body ol {
+  margin: 8px 0;
+  padding-left: 20px;
+}
+.section-body li { margin-bottom: 4px; }
+
+/* Phase cards */
+.phase-card {
+  background: rgba(51, 136, 255, 0.04);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 10px 14px;
+  margin: 8px 0;
+}
+.phase-card .phase-title {
+  font-family: 'SF Mono', monospace;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent);
+  margin-bottom: 4px;
+}
+.phase-card .phase-cost {
+  font-size: 11px;
+  color: var(--amber);
+  margin-bottom: 4px;
+}
+.phase-card .phase-desc {
+  font-size: 12px;
+  color: var(--text);
+}
+
+/* Audit trail colors */
+.audit-verified {
+  color: var(--verified);
+}
+.audit-hypothesis {
+  color: var(--hypothesis);
+}
+.audit-model {
+  color: var(--model);
+}
+.audit-circular {
+  color: var(--circular);
+}
+
+/* --- Mobile: Stacked Layout --- */
+@media (max-width: 900px) {
+  #app {
+    flex-direction: column;
+  }
+
+  #viewport-container {
+    flex: 0 0 55vh;
+    width: 100%;
+  }
+
+  #docs-sidebar {
+    flex: 1;
+    width: 100%;
+    border-left: none;
+    border-top: 1px solid var(--border);
+    padding: 16px 18px 40px;
+  }
+
+  #layer-panel {
+    top: 10px;
+    left: 10px;
+    padding: 8px 10px;
+    font-size: 11px;
+  }
+
+  #component-info {
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+    padding: 10px 14px;
+  }
+
+  body { overflow-y: auto; }
+  #app { height: auto; min-height: 100vh; }
+}
+
+@media (max-width: 480px) {
+  #viewport-container { flex: 0 0 45vh; }
+
+  #layer-panel {
+    max-width: 140px;
+    padding: 6px 8px;
+  }
+  .layer-label { font-size: 11px; }
+
+  #docs-content h1 { font-size: 16px; }
+  summary { font-size: 12px; padding: 8px 12px; }
+  .section-body { padding: 10px 14px; font-size: 12px; }
+}
