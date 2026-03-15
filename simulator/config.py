@@ -65,9 +65,6 @@ WARN_COLOR = (255, 180, 60)
 B0_REFERENCE = (8 * MU_0 * COIL_TURNS * COIL_CURRENT) / (5 * np.sqrt(5) * COIL_RADIUS)
 
 # === PIC Plasma Constants ===
-HG_ION_MASS = 200.59 * 1.6605e-27   # Hg⁺ mass in kg (200.59 amu)
-HG_ION_CHARGE = 1.602e-19            # Single ionization (Coulombs)
-HG_CYCLOTRON_COEFF = HG_ION_CHARGE / HG_ION_MASS  # q/m ≈ 4.81e5 rad/s/T
 PIC_N_PARTICLES = 2000
 PIC_DT = 0.0002                      # 0.2 ms — ~100 steps per cyclotron period at 50 Hz
 PIC_THERMAL_SPEED = 500.0            # m/s — typical Hg⁺ thermal speed in low-T plasma
